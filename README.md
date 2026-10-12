@@ -1,165 +1,49 @@
-# 教师研修网自动看课脚本 2.0
+# 教师研修网自动看课脚本（1 倍速修改版）
 
-适用于 [中国教师研修网](https://ipx.yanxiu.com)（`*.yanxiu.com`）的油猴脚本，帮助自动完成网课学习。
+这是基于 [AGkite/yanxiu](https://github.com/AGkite/yanxiu) 修改的 Tampermonkey 用户脚本。当前修改版为 **v2.9.4**，用于 `*.yanxiu.com` 的课程页面。
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Tampermonkey](https://img.shields.io/badge/Tampermonkey-一键安装-green?style=for-the-badge)](https://raw.githubusercontent.com/AGkite/yanxiu/main/yanxiu.user.js)
+> **请认准 [`yanxiu-1x.user.js`](https://github.com/kukuka-sys/yanxiu/blob/main/yanxiu-1x.user.js)。** 仓库中另一个 `yanxiu.user.js` 是 Fork 时保留的上游原版，设置与本修改版不同。不要同时启用两个脚本。
 
-## 功能
+## 与原版相比
 
-- 课程列表页自动点击「继续看课」
-- 视频自动静音播放，支持倍速（默认 1 倍）
-- 自动处理「继续计时」弹窗、课程评分、视频弹题
-- 播完自动切下一节，或返回列表继续下一门课
-- 达到课程时长上限自动退出当前课程
-- 课程完成后自动刷新页面进入下个课程
-- 会跳过已达标的通识模块，按顺序选择专业课程；
-- 防止重复打开多个视频标签页
+- 视频按 **1 倍速**播放并自动静音。
+- 关闭脚本自动更新；需要更新时手动替换 Tampermonkey 中的脚本。
+- 在课程列表中按模块和页面顺序寻找未完成课程；当前页看完后，尝试进入下一页。
+- 完成课程后返回列表并刷新进度，再选择下一门课程。
+- 视频页显示“您已完成看课时长”时，将该分钟数与课程列表中的时长比较；达到课程时长后等待约 10 秒，再返回列表。
+- 保留对视频内弹题、继续计时提示及部分无视频课件或阅读页的处理。
 
-## 一键安装（推荐）
+以上是脚本的设计行为。研修网页面或计时规则变化时，自动操作可能失效；请以网站显示的学习进度为准。
 
-> 安装前请先完成下方「第一步：安装 Tampermonkey」。
+## 安装
 
-**[点击这里一键安装脚本](https://raw.githubusercontent.com/AGkite/yanxiu/main/yanxiu.user.js)**
+1. 在浏览器中安装 [Tampermonkey](https://www.tampermonkey.net/) 扩展。
+2. 打开 **[安装本仓库的 1 倍速脚本](https://raw.githubusercontent.com/kukuka-sys/yanxiu/main/yanxiu-1x.user.js)**。如果 Tampermonkey 没有弹出安装界面，就打开 [`yanxiu-1x.user.js`](https://github.com/kukuka-sys/yanxiu/blob/main/yanxiu-1x.user.js)，复制完整内容，在 Tampermonkey 中新建脚本并粘贴保存。
+3. 如已安装原版或其他同类脚本，先在 Tampermonkey 管理面板中停用它们，避免重复运行。
+4. 打开研修网的课程列表页并刷新。页面右上角出现 `[研修网刷课 v2.9.4]` 状态提示，表示脚本已加载。
 
-安装步骤：
+## 使用与更新
 
-1. 点击上方链接
-2. Tampermonkey 会弹出安装页面，点击 **「安装」**
-3. 打开研修网课程列表页并刷新，右上角出现绿色 `[研修网刷课]` 提示即表示生效
+保持课程列表页打开。脚本会在未达到模块目标学时的情况下寻找未完成课程。完成一门课程后，列表进度可能需要短暂等待或刷新才能更新。
 
-## 零基础完整教程
-
-### 第一步：安装 Tampermonkey（篡改猴）
-
-任选一种浏览器，安装扩展：
-
-| 浏览器 | 安装方式 |
-|--------|----------|
-| Chrome / Edge | [Chrome 网上应用店 - Tampermonkey](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) |
-| Firefox | [Firefox 附加组件 - Tampermonkey](https://addons.mozilla.org/firefox/addon/tampermonkey/) |
-
-安装后，浏览器工具栏会出现 Tampermonkey 图标（黑色方块）。
-
-### 第二步：安装本脚本
-
-方式 A（推荐）：点击 README 顶部的 **[一键安装链接](https://raw.githubusercontent.com/AGkite/yanxiu/main/yanxiu.user.js)**
-
-方式 B（手动）：
-
-1. 打开 [yanxiu.user.js 源码](https://github.com/AGkite/yanxiu/blob/main/yanxiu.user.js)
-2. 点击右上角 **Raw**（原始数据）
-3. Tampermonkey 会自动识别并提示安装
-
-### 第三步：开始使用
-
-1. 登录 [教师研修网](https://ipx.yanxiu.com)
-2. 进入项目的 **课程学习** 列表页（URL 通常含 `/training/member`）
-3. **保持列表页开着**，不要手动点进视频
-4. 脚本会自动打开视频页并完成学习，右上角可查看运行状态
-
-## 使用说明
-
-### 推荐用法
-
-```
-课程列表页（保持打开） → 脚本自动点「继续看课」 → 视频页自动播放
-→ 学完自动下一节 / 返回列表 → 继续下一门课
-```
-
-### 状态面板
-
-脚本运行后，页面右上角会显示绿色提示，例如：
-
-```
-[研修网刷课] 已点击继续看课（进度 96%） | 倍速 2x
-[研修网刷课] 已有视频页在学习，等待完成 | 倍速 2x
-[研修网刷课] 当前视频已学完，点击下一节 | 倍速 2x
-```
-
-### 修改倍速
-
-编辑 `yanxiu.user.js` 第 22 行：
-
-```javascript
-const PLAYBACK_RATE = 2;  // 改为 1、1.5、2 等，建议不超过 2
-```
-
-在 Tampermonkey 中：点击扩展图标 → **管理面板** → 找到本脚本 → **编辑** → 修改后 **Ctrl+S 保存**。
-
-### 自动更新
-
-脚本已配置 默认关闭自动更新。
+本修改版没有启用自动更新。仓库中的脚本改动后，已经安装的副本**不会自动同步**；请重新复制或安装新版本，并刷新课程列表页和视频页。
 
 ## 常见问题
 
-**Q：脚本没有反应？**
+**右上角没有状态提示？** 检查 Tampermonkey 是否启用了本脚本，以及当前网址是否属于 `*.yanxiu.com`，然后刷新页面。
 
-- 确认 Tampermonkey 中脚本已启用（开关为绿色）
-- 确认当前网址是 `*.yanxiu.com`
-- 刷新页面，查看右上角是否有绿色状态面板
-- 按 F12 打开控制台，搜索 `[研修网刷课]` 查看日志
+**为什么显示“已完成看课时长”却没有立即切换？** 提示出现本身不表示整门课程完成。脚本会比较提示中的分钟数和该课程在列表中的总时长；达到时长后还会等待约 10 秒。
 
-**Q：刷新列表页弹出两个视频标签？**
+**为什么重复打开同一课程？** 网站列表的进度可能尚未更新。请检查课程是否确实显示 100%，必要时手动刷新列表页，并确认没有同时启用原版脚本。
 
-- 请更新到最新版脚本（v2.2+），已修复重复点击问题
-- 关闭多余视频标签，只保留列表页和视频页各一个
+**最小化后还能运行吗？** 浏览器可能限制后台标签页的定时器和视频播放，不能保证持续运行。请观察网站记录的学习进度。
 
-**Q：学时没有增加？**
+## 来源与许可
 
-- 倍速过高可能导致不计学时，建议设为 1~2 倍
-- 确保视频页处于前台或未被浏览器节流
-
-**Q：一键安装链接打不开？**
-
-- 确认已在 GitHub 创建了 `AGkite/yanxiu` 仓库并推送代码
-- 仓库需为 **Public（公开）**，否则 raw 链接无法访问
-
-## 支持的页面
-
-| 页面类型 | URL 示例 |
-|----------|----------|
-| 新版课程列表 | `/train2/workspace/.../training/member` |
-| 新版视频页 | `/train2/workspace/.../training/...` |
-| 旧版课程列表 | `/train/guide/course/list` |
-| 旧版视频页 | `/grain/course/.../detail` |
-
-## 开发者
-
-- 作者：[AGkite](https://github.com/AGkite)
-- 仓库：[github.com/AGkite/yanxiu](https://github.com/AGkite/yanxiu)
-- 问题反馈：[Issues](https://github.com/AGkite/yanxiu/issues)
-
-### 本地开发 & 推送到 GitHub
-
-```bash
-git clone https://github.com/AGkite/yanxiu.git
-cd yanxiu
-
-# 修改 yanxiu.user.js 后
-git add .
-git commit -m "update script"
-git push
-```
-
-首次推送（本地已有代码时）：
-
-```bash
-cd c:\github\yanxiu
-git init
-git branch -M main
-git add .
-git commit -m "init: 教师研修网自动看课脚本"
-git remote add origin https://github.com/AGkite/yanxiu.git
-git push -u origin main
-```
-
-> 请先在 GitHub 网页上创建空仓库 `yanxiu`（不要勾选 README，避免冲突）。
+原项目：[AGkite/yanxiu](https://github.com/AGkite/yanxiu)。本仓库是其 Fork，保留原项目的 [MIT 许可证](https://github.com/kukuka-sys/yanxiu/blob/main/LICENSE)及作者信息。
 
 ## 免责声明
 
-本脚本仅供学习与技术交流，请遵守研修网及相关平台的使用规定。使用本脚本产生的任何后果由使用者自行承担。
+本脚本仅供个人学习和技术交流。它会尝试操作研修网页面，但不保证视频播放、课程切换或学习时长一定会被平台正确记录。网站页面、计时方式或使用规则发生变化时，脚本可能失效或产生与预期不同的结果。
 
-## License
-
-[MIT](LICENSE)
+使用前请了解并遵守研修网及所属培训项目的规定。请自行核对课程完成状态和实际学习记录；使用本脚本产生的后果由使用者自行承担。本项目与研修网及培训主办方没有关联。
